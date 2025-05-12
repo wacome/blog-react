@@ -61,7 +61,7 @@ export default function CommentSection({ comments, postId }: CommentSectionProps
       setError(null);
       const returnUrl = window.location.href;
       localStorage.setItem('returnUrl', returnUrl);
-      window.location.href = `http://localhost:8080/api/auth/github?returnUrl=${encodeURIComponent(returnUrl)}`;
+      window.location.href = `https://api.toycon.cn/api/auth/github?returnUrl=${encodeURIComponent(returnUrl)}`;
     } catch (err) {
       setError('GitHub登录失败，请稍后重试');
       setIsGitHubLoading(false);
