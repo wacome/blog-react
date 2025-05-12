@@ -61,6 +61,8 @@ export default function CommentSection({ comments, postId }: CommentSectionProps
     try {
       setIsGitHubLoading(true);
       setError(null);
+      // 调试输出当前页面地址
+      console.log('handleGitHubLogin window.location.href:', window.location.href);
       // 记录原始页面
       localStorage.setItem('returnUrl', window.location.href);
       const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
