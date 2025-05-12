@@ -62,7 +62,7 @@ export default function CommentSection({ comments, postId }: CommentSectionProps
       const returnUrl = window.location.href;
       localStorage.setItem('returnUrl', returnUrl);
       const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
-      window.location.href = `${apiBaseUrl}/api/auth/github?returnUrl=${encodeURIComponent(returnUrl)}`;
+      window.location.href = `${apiBaseUrl}/auth/github?returnUrl=${encodeURIComponent(returnUrl)}`;
     } catch (err) {
       setError('GitHub登录失败，请稍后重试');
       setIsGitHubLoading(false);
