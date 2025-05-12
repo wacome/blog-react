@@ -102,11 +102,11 @@ export default function CommentSection({ comments, postId }: CommentSectionProps
       }, ...localComments]);
       setCommentText('');
       if (!user) {
-      setName('');
-      setEmail('');
-      setWebsite('');
+        setName('');
+        setEmail('');
+        setWebsite('');
       }
-      setSuccess('评论提交成功，等待审核或已发布');
+      setSuccess('评论已提交，正在等待审核，审核通过后将显示在评论区');
     } catch (e: any) {
       setError(e.message || '评论提交失败');
     } finally {
@@ -154,7 +154,7 @@ export default function CommentSection({ comments, postId }: CommentSectionProps
       }, ...localComments]);
       setReplyText('');
       setReplyTo(null);
-      setSuccess('回复提交成功，等待审核或已发布');
+      setSuccess('回复已提交，正在等待审核，审核通过后将显示在评论区');
     } catch (e: any) {
       setError(e.message || '回复提交失败');
     } finally {

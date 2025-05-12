@@ -11,7 +11,11 @@ const apiClient = axios.create({
 
 // 请求拦截器，自动加 token
 apiClient.interceptors.request.use(config => {
-  const token = localStorage.getItem('token');
+  // 判断当前页面是否为后台
+  const isAdmin = typeof window !== 'undefined' && window.location.pathname.startsWith('/admin');
+  const token = isAdmin
+    ? localStorage.getItem('admin_token')
+    : localStorage.getItem('user_token');
   if (token) {
     config.headers = config.headers || {};
     config.headers.Authorization = `Bearer ${token}`;
