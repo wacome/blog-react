@@ -8,6 +8,7 @@ import { commentApi } from '@/api/commentApi';
 import { useUser } from '@/contexts/UserContext';
 import { Comment as CommentType } from '@/types';
 import type { CommentInput } from '@/api/commentApi';
+import type { User as ApiUser } from '@/api/userApi';
 
 interface Comment extends CommentType {
   children?: Comment[];
@@ -37,7 +38,7 @@ export default function CommentSection({ comments, postId }: CommentSectionProps
   const { user, setUser } = useUser();
   const [commentText, setCommentText] = useState('');
   const [localComments, setLocalComments] = useState<Comment[]>(Array.isArray(comments) ? comments : []);
-  const [name, setName] = useState(user?.name || user?.username || '');
+  const [name, setName] = useState(user?.nickname || user?.username || '');
   const [email, setEmail] = useState(user?.email || '');
   const [website, setWebsite] = useState('');
   const [loading, setLoading] = useState(false);
@@ -50,7 +51,7 @@ export default function CommentSection({ comments, postId }: CommentSectionProps
 
   useEffect(() => {
     if (user) {
-      setName(user.name || user.username || '');
+      setName(user.nickname || user.username || '');
       setEmail(user.email || '');
     }
   }, [user]);
@@ -251,10 +252,10 @@ export default function CommentSection({ comments, postId }: CommentSectionProps
               <div className="flex items-center">
                 <img
                   src={user.avatar && user.avatar.startsWith('http') ? `/api/proxy-image?url=${encodeURIComponent(user.avatar)}` : user.avatar}
-                  alt={user.name || user.username || '用户头像'}
+                  alt={user.nickname || user.username || '用户头像'}
                   className="w-10 h-10 rounded-full mr-3 object-cover"
                 />
-                <span className="text-gray-700 text-sm md:text-base">已登录为 <span className="font-semibold">{user.name || user.username}</span></span>
+                <span className="text-gray-700 text-sm md:text-base">已登录为 <span className="font-semibold">{user.nickname || user.username}</span></span>
               </div>
               <button
                 type="button"

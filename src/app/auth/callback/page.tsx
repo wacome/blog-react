@@ -1,24 +1,22 @@
 'use client';
 
 import { useEffect, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useUser } from '@/contexts/UserContext';
+import { getCurrentUser } from '@/api/userApi';
 
 function AuthCallbackContent() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const { setUser } = useUser();
 
   useEffect(() => {
-    const token = searchParams.get('token');
-    const userStr = searchParams.get('user');
-
-    if (token && userStr) {
+    const handleCallback = async () => {
       try {
-        const user = JSON.parse(decodeURIComponent(userStr));
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(user));
-        setUser(user);
+        // 获取用户信息
+        const userData = await getCurrentUser();
+        
+        // 更新用户状态
+        setUser(userData);
 
         // 获取之前保存的返回 URL
         const returnUrl = localStorage.getItem('returnUrl');
@@ -27,13 +25,13 @@ function AuthCallbackContent() {
         // 重定向到之前的页面或首页
         router.push(returnUrl || '/');
       } catch (error) {
-        console.error('解析用户信息失败:', error);
+        console.error('获取用户信息失败:', error);
         router.push('/');
       }
-    } else {
-      router.push('/');
-    }
-  }, [searchParams, router, setUser]);
+    };
+
+    handleCallback();
+  }, [router, setUser]);
 
   return (
     <div className="min-h-screen flex items-center justify-center">

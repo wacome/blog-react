@@ -4,36 +4,34 @@ import axios, { AxiosResponse, InternalAxiosRequestConfig, AxiosError } from 'ax
 const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080/api',
   timeout: 10000,
+  withCredentials: true, // 允许跨域请求携带cookie
   headers: {
     'Content-Type': 'application/json',
   }
 });
 
-// 请求拦截器，自动加 token
-apiClient.interceptors.request.use(config => {
-  // 判断当前页面是否为后台
-  const isAdmin = typeof window !== 'undefined' && window.location.pathname.startsWith('/admin');
-  const token = isAdmin
-    ? localStorage.getItem('admin_token')
-    : localStorage.getItem('user_token');
-  if (token) {
-    config.headers = config.headers || {};
-    config.headers.Authorization = `Bearer ${token}`;
+// 请求拦截器
+apiClient.interceptors.request.use(
+  (config) => {
+    // 从cookie中获取token，不需要手动添加到请求头
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
   }
-  return config;
-});
+);
 
 // 响应拦截器
 apiClient.interceptors.response.use(
-  (response: AxiosResponse) => {
+  (response) => {
     // 如果响应成功，直接返回响应数据
     return response.data;
   },
-  (error: AxiosError) => {
+  (error) => {
     // 处理错误响应
     if (error.response?.status === 401) {
-      // 未授权，清除token并跳转到登录页
-      localStorage.removeItem('token');
+      // 未授权，清除用户状态并跳转到登录页
+      localStorage.removeItem('user');
       window.location.href = '/login';
     }
     return Promise.reject(error);

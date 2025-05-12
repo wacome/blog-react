@@ -1,25 +1,18 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  avatar?: string;
-  username?: string;
-}
+import { User as ApiUser } from '@/api/userApi';
 
 interface UserContextType {
-  user: User | null;
-  setUser: (user: User | null) => void;
+  user: ApiUser | null;
+  setUser: (user: ApiUser | null) => void;
   loading: boolean;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export function UserProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<ApiUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -38,7 +31,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
 
   const value = {
     user,
-    setUser: (newUser: User | null) => {
+    setUser: (newUser: ApiUser | null) => {
       setUser(newUser);
       if (newUser) {
         localStorage.setItem('user', JSON.stringify(newUser));
@@ -55,7 +48,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
 export function useUser() {
   const context = useContext(UserContext);
   if (context === undefined) {
-    throw new Error('useUser 必须在 UserProvider 内部使用');
+    throw new Error('useUser must be used within a UserProvider');
   }
   return context;
 } 
