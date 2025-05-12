@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['localhost', 'img.picui.cn', 'img1.doubanio.com', 'avatars.githubusercontent.com'],
+    domains: ['localhost', 'img.picui.cn', 'img1.doubanio.com', 'avatars.githubusercontent.com', 'api.toycon.cn'],
   },
   async headers() {
     return [
