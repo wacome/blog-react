@@ -13,7 +13,13 @@ const apiClient = axios.create({
 // 请求拦截器
 apiClient.interceptors.request.use(
   (config) => {
-    // 从cookie中获取token，不需要手动添加到请求头
+    // 从 cookie 中获取 token
+    const cookies = document.cookie.split(';');
+    const authToken = cookies.find(cookie => cookie.trim().startsWith('auth_token='));
+    if (authToken) {
+      const token = authToken.split('=')[1];
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
   },
   (error) => {
