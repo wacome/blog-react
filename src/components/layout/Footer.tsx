@@ -11,7 +11,7 @@ export default function Footer() {
       <div className="container-main">
         <div className="flex flex-col items-center space-y-4 md:space-y-0 md:flex-row md:justify-between">
           <div className="text-sm text-gray-500 text-center md:text-left">
-            © 2023-{currentYear} Toycon的世界探索记
+            © 2023-{currentYear} Toyconの世界探索記
           </div>
           
           <div className="text-sm text-gray-500 text-center md:text-left">

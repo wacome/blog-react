@@ -10,7 +10,7 @@ import { UserProvider } from '@/contexts/UserContext';
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "Toycon的博客",
+  title: "Toyconの博客",
   description: "一个记录学习和生活的个人博客",
   icons: {
     icon: '/images/favicon.ico',
