@@ -213,7 +213,7 @@ export default function PostDetail({ params }: PostParams) {
               <img 
                 src={getImageSrc(coverImage)} 
                 alt={post.title} 
-                className="w-full h-64 object-cover rounded-lg shadow-lg" 
+                className="w-full h-full object-cover rounded-lg shadow-lg" 
                 onError={e => { (e.target as HTMLImageElement).src = '/images/default-cover.jpg'; }} 
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
