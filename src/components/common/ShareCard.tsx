@@ -19,12 +19,12 @@ const ShareCard = React.forwardRef<HTMLDivElement, ShareCardProps>(
       <div
         ref={ref}
         style={{
-          width: 340,
+          width: '100%',
           minHeight: 200,
           background: `url('/images/sharecard-bg.jpg') center/cover no-repeat, linear-gradient(135deg, #e6f0ff 0%, #bcd7f7 60%, #fffbe6 100%)`,
           borderRadius: 22,
           boxShadow: '0 6px 32px 0 rgba(80,120,180,0.10)',
-          padding: 20,
+          padding: 16,
           fontFamily: 'inherit',
           color: '#222',
           position: 'relative',
@@ -38,9 +38,24 @@ const ShareCard = React.forwardRef<HTMLDivElement, ShareCardProps>(
         }}
       >
         {/* 文章标题和副标题 */}
-        <div style={{ marginBottom: 10 }}>
-          <div style={{ fontWeight: 700, fontSize: 20, marginBottom: 4, lineHeight: 1.3, wordBreak: 'break-all' }}>{title}</div>
-          {excerpt && <div style={{ fontSize: 13, color: '#888', fontWeight: 500, marginBottom: 2, lineHeight: 1.4, wordBreak: 'break-all' }}>{excerpt}</div>}
+        <div style={{ marginBottom: 8 }}>
+          <div style={{ 
+            fontWeight: 700, 
+            fontSize: 'clamp(16px, 4vw, 20px)', 
+            marginBottom: 4, 
+            lineHeight: 1.3, 
+            wordBreak: 'break-all' 
+          }}>{title}</div>
+          {excerpt && (
+            <div style={{ 
+              fontSize: 'clamp(12px, 3vw, 13px)', 
+              color: '#888', 
+              fontWeight: 500, 
+              marginBottom: 2, 
+              lineHeight: 1.4, 
+              wordBreak: 'break-all' 
+            }}>{excerpt}</div>
+          )}
         </div>
         {/* 摘录内容/正文分段 */}
         {content && (
@@ -48,11 +63,11 @@ const ShareCard = React.forwardRef<HTMLDivElement, ShareCardProps>(
             style={{
               background: 'rgba(255,255,255,0.45)',
               borderRadius: 12,
-              padding: 14,
-              fontSize: 15,
+              padding: 12,
+              fontSize: 'clamp(13px, 3.5vw, 15px)',
               color: '#333',
-              marginBottom: 14,
-              marginTop: 10,
+              marginBottom: 12,
+              marginTop: 8,
               fontStyle: 'italic',
               boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
               minHeight: 32,
@@ -68,15 +83,21 @@ const ShareCard = React.forwardRef<HTMLDivElement, ShareCardProps>(
           </div>
         )}
         {/* 底部信息区：左下作者，右下出处+二维码 */}
-        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginTop: 8, minHeight: 56 }}>
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'flex-end', 
+          justifyContent: 'space-between', 
+          marginTop: 8, 
+          minHeight: 48 
+        }}>
           {/* 左下：头像+作者名（上下两行） */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', opacity: 0.7 }}>
             <img
               src={avatar || '/images/avatar.png'}
               alt={author}
               style={{
-                width: 28,
-                height: 28,
+                width: 24,
+                height: 24,
                 borderRadius: '50%',
                 marginBottom: -2,
                 objectFit: 'cover',
@@ -86,7 +107,7 @@ const ShareCard = React.forwardRef<HTMLDivElement, ShareCardProps>(
               }}
             />
             <span style={{
-              fontSize: 15,
+              fontSize: 'clamp(12px, 3vw, 15px)',
               color: '#666',
               fontWeight: 500,
               lineHeight: '20px',
@@ -95,12 +116,32 @@ const ShareCard = React.forwardRef<HTMLDivElement, ShareCardProps>(
             }}>神谷綺夜</span>
           </div>
           {/* 右下：出处+二维码 */}
-          <div style={{ display: 'flex', alignItems: 'flex-end', gap: 10 }}>
+          <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8 }}>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', marginBottom: 2 }}>
-              <div style={{ fontSize: 15, color: '#666', fontWeight: 500, fontFamily: 'inherit' }}>Toyconの世界探索記</div>
-              <div style={{ fontSize: 11, color: '#aaa', fontWeight: 400, fontFamily: 'inherit' }}>分享自 Toycon 博客</div>
+              <div style={{ 
+                fontSize: 'clamp(12px, 3vw, 15px)', 
+                color: '#666', 
+                fontWeight: 500, 
+                fontFamily: 'inherit' 
+              }}>Toyconの世界探索記</div>
+              <div style={{ 
+                fontSize: 'clamp(10px, 2.5vw, 11px)', 
+                color: '#aaa', 
+                fontWeight: 400, 
+                fontFamily: 'inherit' 
+              }}>分享自 Toycon 博客</div>
             </div>
-            <QRCodeCanvas value={url} size={44} fgColor="#222" bgColor="transparent" style={{ borderRadius: 8, boxShadow: '0 1px 4px rgba(80,120,180,0.10)', background: 'transparent' }} />
+            <QRCodeCanvas 
+              value={url} 
+              size={40} 
+              fgColor="#222" 
+              bgColor="transparent" 
+              style={{ 
+                borderRadius: 8, 
+                boxShadow: '0 1px 4px rgba(80,120,180,0.10)', 
+                background: 'transparent' 
+              }} 
+            />
           </div>
         </div>
       </div>

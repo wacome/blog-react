@@ -86,7 +86,6 @@ export default function PostDetail({ params }: PostParams) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showToc, setShowToc] = useState(false);
-  const [showShare, setShowShare] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const commentRef = useRef<HTMLDivElement>(null);
 
@@ -124,29 +123,6 @@ export default function PostDetail({ params }: PostParams) {
     fetchData();
   }, [id]);
 
-  useEffect(() => {
-    const onScroll = () => {
-      if (typeof window === 'undefined') return;
-      const scrollY = window.scrollY;
-      const winH = window.innerHeight;
-      const docH = document.body.scrollHeight;
-      setShowShare(scrollY + winH >= docH - 40);
-    };
-    window.addEventListener('scroll', onScroll);
-    onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  useEffect(() => {
-    if (!commentRef.current) return;
-    const observer = new window.IntersectionObserver(
-      ([entry]) => setShowShare(entry.isIntersecting),
-      { root: null, threshold: 0.1 }
-    );
-    observer.observe(commentRef.current);
-    return () => observer.disconnect();
-  }, [commentRef.current]);
-
   if (loading) {
     return <div className="container-main py-12 text-center">加载中...</div>;
   }
@@ -165,7 +141,7 @@ export default function PostDetail({ params }: PostParams) {
       <div className="fixed right-4 bottom-4 flex flex-col items-end gap-3 z-50">
         {isMobile && <TocButton onClick={() => setShowToc(true)} />}
         <div className={`${isMobile ? '' : 'w-16 h-16 md:w-[69px] md:h-18'}`}> 
-          <ShareButton show={!isMobile || showShare} post={post} />
+          <ShareButton show={true} post={post} />
         </div>
         <div className={`${isMobile ? '' : 'w-12 h-12 md:w-14 md:h-14'}`}> 
           <BackToTopButton noFixed={isMobile} />
