@@ -27,14 +27,17 @@ const nextConfig = {
     ];
   },
   async rewrites() {
+    const isDevelopment = process.env.NODE_ENV === 'development';
+    const apiBaseUrl = isDevelopment ? 'http://localhost:8080' : 'https://api.toycon.cn';
+    
     return [
       {
         source: '/api/:path*',
-        destination: 'http://localhost:8080/api/:path*',
+        destination: `${apiBaseUrl}/api/:path*`,
       },
       {
         source: '/uploads/:path*',
-        destination: 'http://localhost:8080/uploads/:path*', // 代理到后端
+        destination: `${apiBaseUrl}/uploads/:path*`,
       },
     ];
   },
