@@ -12,24 +12,18 @@ function AuthCallbackContent() {
   useEffect(() => {
     const handleCallback = async () => {
       try {
-        // 获取用户信息
         const userData = await getCurrentUser();
-        
-        // 更新用户状态
         setUser(userData);
 
-        // 获取之前保存的返回 URL
-        const returnUrl = localStorage.getItem('returnUrl');
-        // 清除保存的 URL
+        // 先读取 returnUrl，再清理
+        const returnUrl = localStorage.getItem('returnUrl') || '/';
+        console.log('auth callback returnUrl:', returnUrl); // 调试用
         localStorage.removeItem('returnUrl');
-        // 重定向到之前的页面或首页
-        router.push(returnUrl || '/');
+        router.replace(returnUrl);
       } catch (error) {
-        console.error('获取用户信息失败:', error);
-        router.push('/');
+        router.replace('/');
       }
     };
-
     handleCallback();
   }, [router, setUser]);
 
