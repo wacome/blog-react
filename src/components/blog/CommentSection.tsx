@@ -9,6 +9,7 @@ import { useUser } from '@/contexts/UserContext';
 import { Comment as CommentType } from '@/types';
 import type { CommentInput } from '@/api/commentApi';
 import type { User as ApiUser } from '@/api/userApi';
+import apiClient from '@/api';
 
 interface Comment extends CommentType {
   children?: Comment[];
@@ -165,6 +166,19 @@ export default function CommentSection({ comments, postId }: CommentSectionProps
     }
   };
 
+  // 退出登录
+  const handleLogout = async () => {
+    try {
+      await apiClient.post('/auth/logout');
+      setUser(null);
+      localStorage.removeItem('user');
+      // 刷新页面，确保所有状态清理
+      window.location.reload();
+    } catch (e) {
+      setError('退出登录失败，请重试');
+    }
+  };
+
   // 递归渲染评论
   function renderCommentItem(comment: Comment, depth = 0) {
   return (
@@ -245,11 +259,7 @@ export default function CommentSection({ comments, postId }: CommentSectionProps
               <button
                 type="button"
               className="ml-4 px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm"
-                onClick={() => {
-                  localStorage.removeItem('user');
-                  localStorage.removeItem('token');
-                  setUser(null);
-                }}
+                onClick={handleLogout}
               >
                 退出登录
               </button>
