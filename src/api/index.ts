@@ -2,7 +2,7 @@ import axios, { AxiosResponse, InternalAxiosRequestConfig, AxiosError } from 'ax
 
 // 创建axios实例
 const apiClient = axios.create({
-  baseURL: '/api',
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080/api',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
