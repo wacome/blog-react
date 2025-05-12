@@ -97,17 +97,41 @@ export const bookApi = {
 
   // 更新图书
   updateBook: async (book: UpdateBookInput) => {
-    return await apiClient.put(`/books/${book.id}`, book);
+    try {
+      const response = await apiClient.put<ApiResponse<Book>>(`/books/${book.id}`, book);
+      if (response.code === 0) {
+        return { data: response.data, error: null };
+      }
+      return { data: null, error: response.message };
+    } catch (error) {
+      return { data: null, error: error instanceof Error ? error.message : '更新图书失败' };
+    }
   },
 
   // 删除图书
   deleteBook: async (id: number) => {
-    return await apiClient.delete(`/books/${id}`);
+    try {
+      const response = await apiClient.delete<ApiResponse<{ message: string }>>(`/books/${id}`);
+      if (response.code === 0) {
+        return { data: response.data, error: null };
+      }
+      return { data: null, error: response.message };
+    } catch (error) {
+      return { data: null, error: error instanceof Error ? error.message : '删除图书失败' };
+    }
   },
 
   // 批量删除图书
   batchDeleteBooks: async (ids: number[]) => {
-    return await apiClient.post('/books/batch-delete', { ids });
+    try {
+      const response = await apiClient.post<ApiResponse<{ message: string }>>('/books/batch-delete', { ids });
+      if (response.code === 0) {
+        return { data: response.data, error: null };
+      }
+      return { data: null, error: response.message };
+    } catch (error) {
+      return { data: null, error: error instanceof Error ? error.message : '批量删除图书失败' };
+    }
   },
 
   // 上传图书封面
