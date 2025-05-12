@@ -13,12 +13,23 @@ const apiClient = axios.create({
 // 请求拦截器
 apiClient.interceptors.request.use(
   (config) => {
-    // 从 cookie 中获取 token
-    const cookies = document.cookie.split(';');
-    const authToken = cookies.find(cookie => cookie.trim().startsWith('auth_token='));
-    if (authToken) {
-      const token = authToken.split('=')[1];
-      config.headers.Authorization = `Bearer ${token}`;
+    // 判断当前页面是否为后台
+    const isAdmin = typeof window !== 'undefined' && window.location.pathname.startsWith('/admin');
+    
+    if (isAdmin) {
+      // 管理员使用 admin_token
+      const adminToken = localStorage.getItem('admin_token');
+      if (adminToken) {
+        config.headers.Authorization = `Bearer ${adminToken}`;
+      }
+    } else {
+      // 普通用户使用 cookie 中的 auth_token
+      const cookies = document.cookie.split(';');
+      const authToken = cookies.find(cookie => cookie.trim().startsWith('auth_token='));
+      if (authToken) {
+        const token = authToken.split('=')[1];
+        config.headers.Authorization = `Bearer ${token}`;
+      }
     }
     return config;
   },
