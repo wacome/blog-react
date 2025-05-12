@@ -234,27 +234,27 @@ export default function CommentSection({ comments, postId }: CommentSectionProps
       <div className="card p-4 md:p-6">
         <h3 className="text-lg md:text-xl font-semibold text-gray-800 mb-4">发表评论</h3>
         {/* 已登录用户信息展示 */}
-        {user && (
+          {user && (
           <div className="flex items-center mb-4 space-x-3">
-            <img
-              src={user.avatar && user.avatar.startsWith('http') ? `/api/proxy-image?url=${encodeURIComponent(user.avatar)}` : user.avatar}
+                <img
+                  src={user.avatar && user.avatar.startsWith('http') ? `/api/proxy-image?url=${encodeURIComponent(user.avatar)}` : user.avatar}
               alt={user.nickname || user.username || '用户头像'}
               className="w-10 h-10 rounded-full object-cover border"
-            />
+                />
             <span className="text-gray-700 text-base">已登录为 <span className="font-semibold">{user.nickname || user.username}</span></span>
-            <button
-              type="button"
+              <button
+                type="button"
               className="ml-4 px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm"
-              onClick={() => {
-                localStorage.removeItem('user');
-                localStorage.removeItem('token');
-                setUser(null);
-              }}
-            >
-              退出登录
-            </button>
-          </div>
-        )}
+                onClick={() => {
+                  localStorage.removeItem('user');
+                  localStorage.removeItem('token');
+                  setUser(null);
+                }}
+              >
+                退出登录
+              </button>
+            </div>
+          )}
         <form onSubmit={handleSubmit}>
           {error && <div className="text-red-500 mb-2 text-sm md:text-base">{error}</div>}
           {success && <div className="text-green-600 mb-2 text-sm md:text-base">{success}</div>}
@@ -262,36 +262,36 @@ export default function CommentSection({ comments, postId }: CommentSectionProps
           {!user && (
             <>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 mb-4">
-                <div>
-                  <input
-                    type="text"
+            <div>
+              <input
+                type="text"
                     className="input text-sm md:text-base"
-                    placeholder="昵称 (必填)"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                  />
-                </div>
-                <div>
-                  <input
-                    type="email"
+                placeholder="昵称 (必填)"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <input
+                type="email"
                     className="input text-sm md:text-base"
-                    placeholder="邮箱 (必填)"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
-                <div>
-                  <input
-                    type="url"
+                placeholder="邮箱 (必填)"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <input
+                type="url"
                     className="input text-sm md:text-base"
-                    placeholder="网址 (可选)"
-                    value={website}
-                    onChange={(e) => setWebsite(e.target.value)}
-                  />
-                </div>
-              </div>
+                placeholder="网址 (可选)"
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+              />
+            </div>
+          </div>
               {/* GitHub 登录按钮 */}
               <div className="mb-4">
                 <button
