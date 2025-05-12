@@ -60,10 +60,11 @@ export default function CommentSection({ comments, postId }: CommentSectionProps
     try {
       setIsGitHubLoading(true);
       setError(null);
-      const returnUrl = window.location.href;
-      localStorage.setItem('returnUrl', returnUrl);
+      // 记录原始页面
+      localStorage.setItem('returnUrl', window.location.href);
       const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
-      window.location.href = `${apiBaseUrl}/auth/github?returnUrl=${encodeURIComponent(returnUrl)}`;
+      // 固定回调到 /auth/callback
+      window.location.href = `${apiBaseUrl}/auth/github?returnUrl=${encodeURIComponent('https://blog.toycon.cn/auth/callback')}`;
     } catch (err) {
       setError('GitHub登录失败，请稍后重试');
       setIsGitHubLoading(false);
