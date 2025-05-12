@@ -61,7 +61,8 @@ export default function CommentSection({ comments, postId }: CommentSectionProps
       setError(null);
       const returnUrl = window.location.href;
       localStorage.setItem('returnUrl', returnUrl);
-      window.location.href = `https://blog.toycon.cn/api/auth/github?returnUrl=${encodeURIComponent(returnUrl)}`;
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
+      window.location.href = `${apiBaseUrl}/api/auth/github?returnUrl=${encodeURIComponent(returnUrl)}`;
     } catch (err) {
       setError('GitHub登录失败，请稍后重试');
       setIsGitHubLoading(false);
@@ -102,9 +103,9 @@ export default function CommentSection({ comments, postId }: CommentSectionProps
       }, ...localComments]);
       setCommentText('');
       if (!user) {
-        setName('');
-        setEmail('');
-        setWebsite('');
+      setName('');
+      setEmail('');
+      setWebsite('');
       }
       setSuccess('评论已提交，正在等待审核，审核通过后将显示在评论区');
     } catch (e: any) {
