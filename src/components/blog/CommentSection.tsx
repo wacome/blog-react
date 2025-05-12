@@ -164,26 +164,26 @@ export default function CommentSection({ comments, postId }: CommentSectionProps
 
   // 递归渲染评论
   function renderCommentItem(comment: Comment, depth = 0) {
-    return (
+  return (
       <div key={comment.id} className={`mb-3 ${depth > 0 ? 'ml-6 md:ml-10' : ''}`}>
         <div className="card p-4 md:p-5 flex flex-col md:flex-row">
-          <div className="flex-shrink-0 mb-3 md:mb-0 md:mr-4 flex items-center">
-            <div className="relative w-10 h-10 rounded-full overflow-hidden">
-              <Image 
-                src={comment.avatar || '/images/default-avatar.png'} 
-                alt={comment.author} 
-                fill 
-                className="object-cover" 
-              />
-            </div>
-            <div className="ml-3 md:hidden">
-              <h3 className="font-medium text-gray-800">{comment.author}</h3>
+            <div className="flex-shrink-0 mb-3 md:mb-0 md:mr-4 flex items-center">
+              <div className="relative w-10 h-10 rounded-full overflow-hidden">
+                <Image 
+                  src={comment.avatar || '/images/default-avatar.png'} 
+                  alt={comment.author} 
+                  fill 
+                  className="object-cover" 
+                />
+              </div>
+              <div className="ml-3 md:hidden">
+                <h3 className="font-medium text-gray-800">{comment.author}</h3>
               <span className="text-xs text-gray-500">{comment.createdAt ? new Date(comment.createdAt).toLocaleDateString('zh-CN') : ''}</span>
+              </div>
             </div>
-          </div>
-          <div className="flex-grow">
-            <div className="hidden md:flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2">
-              <h3 className="font-medium text-gray-800">{comment.author}</h3>
+            <div className="flex-grow">
+              <div className="hidden md:flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2">
+                <h3 className="font-medium text-gray-800">{comment.author}</h3>
               <span className="text-xs text-gray-500">{comment.createdAt ? new Date(comment.createdAt).toLocaleDateString('zh-CN') : ''}</span>
             </div>
             <p className="text-gray-700 text-sm md:text-base whitespace-pre-line">{comment.content}</p>
@@ -214,7 +214,7 @@ export default function CommentSection({ comments, postId }: CommentSectionProps
             )}
           </div>
         </div>
-      </div>
+            </div>
     );
   }
 
