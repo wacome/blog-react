@@ -166,7 +166,7 @@ export default function AdminPostsPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {new Date(post.created_at).toLocaleDateString('zh-CN')}
+                      {new Date(post.created_at || '').toLocaleDateString('zh-CN')}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <button

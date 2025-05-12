@@ -6,9 +6,8 @@ import { FaCalendarAlt, FaTag, FaEye } from 'react-icons/fa';
 import PostCard from "@/components/blog/PostCard";
 import Banner from "@/components/home/Banner";
 import { useEffect, useState } from 'react';
-import { getPosts } from '@/api/postApi';
-import { Post } from '@/types';
 import { postApi } from '@/api/postApi';
+import { Post } from '@/types';
 
 export default function Home() {
   const [posts, setPosts] = useState<Post[]>([]);

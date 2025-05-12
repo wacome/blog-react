@@ -44,21 +44,17 @@ export default function EditPostPage() {
           coverImage: post.cover || post.cover_image || post.coverImage || '',
           published: post.status === 'published',
           tags: Array.isArray(post.tags) ? post.tags.map((t: any) => typeof t === 'string' ? t : t.name) : [],
-          author: post.author?.username || '',
+          author: (post.author as any)?.username || (post.author as any)?.name || '',
           authorType: (post as any)?.authorType || (post as any)?.author_type || 'original',
         });
       })
       .catch(e => setError(e.message))
       .finally(() => setLoading(false));
 
-    tagApi.getTags().then(({ data: tags, error }) => {
-      if (error) {
-        console.error('获取标签失败:', error);
-        return;
-      }
-      if (tags) {
-        setAllTags(tags.map(t => t.name));
-      }
+    tagApi.getTags().then((res: any) => {
+      let tags: any[] = Array.isArray(res) ? res : res?.data;
+      if (!tags) return;
+      setAllTags(tags.map((t: any) => t.name));
     });
   }, [id]);
 

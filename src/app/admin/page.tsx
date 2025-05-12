@@ -82,7 +82,7 @@ export default function AdminDashboard() {
           id: post.id,
           title: post.title,
           views: post.views,
-          date: new Date(post.created_at).toLocaleDateString('zh-CN')
+          date: new Date(post.created_at || '').toLocaleDateString('zh-CN')
         })));
 
         // 设置最近评论
@@ -91,7 +91,7 @@ export default function AdminDashboard() {
           author: comment.author,
           content: comment.content,
           date: new Date(comment.createdAt).toLocaleDateString('zh-CN'),
-          postId: comment.postId
+          postId: (comment as any).post_id ?? (comment as any).postId ?? 0
         })));
       } catch (e: any) {
         setError(e.message);

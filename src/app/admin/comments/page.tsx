@@ -15,7 +15,8 @@ export default function CommentsManagement() {
         // 字段转换，兼容 created_at
         const mapped = (Array.isArray(data) ? data : []).map(item => ({
           ...item,
-          createdAt: item.created_at,
+          createdAt: item.created_at || '',
+          updatedAt: item.updated_at || '',
         }));
         setComments(mapped);
       })

@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { FaSearch, FaTags } from 'react-icons/fa';
 import PostCard from "@/components/blog/PostCard";
@@ -9,7 +9,7 @@ import { tagApi } from '@/api/tagApi';
 import type { Post } from '@/types';
 import type { Tag } from '@/api/tagApi';
 
-export default function PostsPage() {
+function PostsPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [posts, setPosts] = useState<Post[]>([]);
@@ -132,5 +132,13 @@ export default function PostsPage() {
             </div>
           )}
     </div>
+  );
+}
+
+export default function PostsPage() {
+  return (
+    <Suspense fallback={<div>加载中...</div>}>
+      <PostsPageContent />
+    </Suspense>
   );
 } 

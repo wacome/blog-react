@@ -36,7 +36,7 @@ export default function ArchivePage() {
 
   // 按年份分组文章
   const postsByYear = posts.reduce((acc, post) => {
-    const year = new Date(post.created_at).getFullYear();
+    const year = new Date(post.created_at ?? '1970-01-01').getFullYear();
     if (!acc[year]) {
       acc[year] = [];
     }
@@ -80,7 +80,9 @@ export default function ArchivePage() {
                       </a>
                     </h3>
                     <div className="text-sm text-gray-500">
-                      {new Date(post.created_at).toLocaleDateString('zh-CN')}
+                      {typeof post.created_at === 'string' && post.created_at
+                        ? new Date(post.created_at).toLocaleDateString('zh-CN')
+                        : '-'}
                     </div>
                   </article>
                 ))}
