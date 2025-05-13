@@ -35,12 +35,6 @@ export default function PostCard({ post }: PostCardProps) {
           <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5">
             <h2 className="text-lg md:text-xl font-bold text-white mb-2 line-clamp-2">
               {post.title}
-              {post.authorType === 'original' && (
-                <span className="inline-block bg-green-500 text-white text-xs px-2 py-0.5 rounded mr-2 align-middle">原创</span>
-              )}
-              {post.authorType === 'repost' && (
-                <span className="inline-block bg-yellow-500 text-white text-xs px-2 py-0.5 rounded mr-2 align-middle">转载</span>
-              )}
             </h2>
           </div>
         </div>
@@ -48,6 +42,16 @@ export default function PostCard({ post }: PostCardProps) {
       
       <div className="p-4 md:p-5">
         <div className="flex flex-wrap items-center text-xs md:text-sm text-gray-500 gap-4 md:gap-6 mb-3 md:mb-4">
+          {(post.authorType === 'original' || post.authorType === 'repost') && (
+            <span className={
+              'inline-block px-2 py-0.5 rounded mr-2 align-middle ' +
+              (post.authorType === 'original'
+                ? 'bg-green-200 text-green-800'
+                : 'bg-yellow-200 text-yellow-800')
+            }>
+              {post.authorType === 'original' ? '原创' : '转载'}
+            </span>
+          )}
           <motion.div 
             className="flex items-center"
             initial={{ opacity: 0, x: -10 }}

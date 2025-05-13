@@ -27,6 +27,13 @@ export interface ApiResponse<T> {
   data: T;
 }
 
+function normalizePost(post: any): Post {
+  return {
+    ...post,
+    authorType: post.authorType ?? post.author_type,
+  };
+}
+
 export const postApi = {
   // 获取文章列表
   getPosts: async (params: GetPostsParams = {}) => {
@@ -44,7 +51,8 @@ export const postApi = {
     try {
       const response = await apiClient.get<ApiResponse<GetPostsResponse>>(`/posts?${queryParams}`);
       if (response.code === 0) {
-        return { data: response.data, error: null };
+        const posts = (response.data.posts || []).map(normalizePost);
+        return { data: { ...response.data, posts }, error: null };
       }
       return { data: null, error: response.message };
     } catch (error) {
@@ -57,7 +65,7 @@ export const postApi = {
     try {
       const response = await apiClient.get<ApiResponse<Post>>(`/posts/${id}`);
       if (response.code === 0) {
-        return { data: response.data, error: null };
+        return { data: normalizePost(response.data), error: null };
       }
       return { data: null, error: response.message };
     } catch (error) {
