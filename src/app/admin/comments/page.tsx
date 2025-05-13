@@ -90,7 +90,13 @@ export default function CommentsManagement() {
                       ? new Date(comment.createdAt).toLocaleString('zh-CN')
                       : '-'}
                   </td>
-                  <td className="text-center">{comment.approved ? <span className="text-green-600">已审核</span> : <span className="text-yellow-600">待审核</span>}</td>
+                  <td className="text-center">
+                    {comment.approved ? (
+                      <span className="inline-block px-2 py-0.5 rounded bg-green-100 text-green-800 text-xs font-semibold">已审核</span>
+                    ) : (
+                      <span className="inline-block px-2 py-0.5 rounded bg-yellow-100 text-yellow-800 text-xs font-semibold">待审核</span>
+                    )}
+                  </td>
                   <td className="text-center">
                     <div className="flex items-center justify-center gap-2">
                       {!comment.approved && (
