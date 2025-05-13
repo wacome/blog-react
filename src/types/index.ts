@@ -31,6 +31,7 @@ export interface Post {
     id: number;
     name: string;
   };
+  authorType?: string;
 }
 
 export interface User {

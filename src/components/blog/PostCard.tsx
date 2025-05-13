@@ -35,6 +35,12 @@ export default function PostCard({ post }: PostCardProps) {
           <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5">
             <h2 className="text-lg md:text-xl font-bold text-white mb-2 line-clamp-2">
               {post.title}
+              {post.authorType === 'original' && (
+                <span className="inline-block bg-green-500 text-white text-xs px-2 py-0.5 rounded mr-2 align-middle">原创</span>
+              )}
+              {post.authorType === 'repost' && (
+                <span className="inline-block bg-yellow-500 text-white text-xs px-2 py-0.5 rounded mr-2 align-middle">转载</span>
+              )}
             </h2>
           </div>
         </div>

@@ -59,6 +59,7 @@ interface Post {
   tags: string[];
   views: number;
   comments?: Comment[];
+  authorType?: string;
 }
 
 interface PostParams {
@@ -224,6 +225,12 @@ export default function PostDetail({ params }: PostParams) {
                         : (typeof post.author === 'string' && post.author)
                           ? post.author
                           : (post.author_name || '佚名')}
+                      {post.authorType === 'original' && (
+                        <span className="ml-2 inline-block bg-green-500 text-white text-xs px-2 py-0.5 rounded align-middle">原创</span>
+                      )}
+                      {post.authorType === 'repost' && (
+                        <span className="ml-2 inline-block bg-yellow-500 text-white text-xs px-2 py-0.5 rounded align-middle">转载</span>
+                      )}
                     </span>
                   </div>
                   <div className="flex items-center">
