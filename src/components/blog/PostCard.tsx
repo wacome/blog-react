@@ -41,10 +41,24 @@ export default function PostCard({ post }: PostCardProps) {
       </Link>
       
       <div className="p-4 md:p-5">
-        <div className="flex flex-wrap items-center text-xs md:text-sm text-gray-500 gap-4 md:gap-6 mb-3 md:mb-4">
+        <div className="flex flex-wrap items-center text-xs md:text-sm text-gray-700 gap-1 md:gap-2 mb-3 md:mb-4">
+          {/* 作者头像 */}
+          <span className="w-6 h-6 relative rounded-full overflow-hidden bg-gray-100 flex-shrink-0">
+            <Image
+              src={post.author?.avatar || '/images/avatar.png'}
+              alt={post.author?.name || (typeof post.author === 'string' && post.author) || '作者头像'}
+              fill
+              className="object-cover"
+            />
+          </span>
+          {/* 作者昵称 */}
+          <span className="font-medium ml-[1px]">
+            {post.author?.name || (typeof post.author === 'string' && post.author) || '佚名'}
+          </span>
+          {/* 原创/转载标识 */}
           {(post.authorType === 'original' || post.authorType === 'repost') && (
             <span className={
-              'inline-block px-2 py-0.5 rounded mr-2 align-middle ' +
+              'inline-block px-2 py-0.5 rounded align-middle text-xs ml-1 ' +
               (post.authorType === 'original'
                 ? 'bg-green-200 text-green-800'
                 : 'bg-yellow-200 text-yellow-800')
@@ -52,24 +66,19 @@ export default function PostCard({ post }: PostCardProps) {
               {post.authorType === 'original' ? '原创' : '转载'}
             </span>
           )}
-          <motion.div 
-            className="flex items-center"
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3, duration: 0.4 }}
-          >
+          {/* 日期 */}
+          <span className="flex items-center ml-2">
             <FaCalendarAlt className="mr-1" />
-            <span>{post.date}</span>
-          </motion.div>
-          <motion.div 
-            className="flex items-center"
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.4, duration: 0.4 }}
-          >
+            {(() => {
+              const date = post.created_at || post.updated_at || post.date;
+              return date ? new Date(date).toLocaleDateString('zh-CN') : '';
+            })()}
+          </span>
+          {/* 浏览数 */}
+          <span className="flex items-center ml-2">
             <FaEye className="mr-1" />
             <span>{post.views}</span>
-          </motion.div>
+          </span>
         </div>
         
         <motion.p 
