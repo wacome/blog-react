@@ -224,7 +224,16 @@ export default function EditPostPage() {
           </div>
           <div>
             <label className="form-label">实时预览</label>
-            <div className="markdown-content bg-gray-50 rounded p-4 min-h-[200px] border border-gray-200 shadow-inner" style={{maxHeight: 400, overflowY: 'auto'}} dangerouslySetInnerHTML={{ __html: md.render(form.content || '') }} />
+            <div 
+              className="markdown-content bg-gray-50 rounded p-4 min-h-[200px] border border-gray-200 shadow-inner" 
+              style={{maxHeight: 400, overflowY: 'auto'}} 
+              dangerouslySetInnerHTML={{ 
+                __html: md.render(form.content || '').replace(
+                  /<img src="(.*?)"/g, 
+                  (match, src) => `<img src="${src.startsWith('http') ? `/api/proxy-image?url=${encodeURIComponent(src)}` : src}"`
+                )
+              }} 
+            />
           </div>
         </div>
       </form>
