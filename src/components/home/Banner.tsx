@@ -32,7 +32,7 @@ export default function Banner() {
           username: "Toycon",
           nickname: "神谷綺夜",
           bio: "大三学生，喜欢计算机技术、读书等",
-          avatar: "/images/avatar.png",
+          avatar: "https://blog-1257292087.cos.ap-nanjing.myqcloud.com/avatar.png",
           socialLinks: [
             { name: "博客", url: "/posts" },
             { name: "Github", url: "https://github.com/wacome", isExternal: true },
@@ -66,7 +66,7 @@ export default function Banner() {
           username: "Toycon",
           nickname: "神谷絮夜",
           bio: "大三学生，喜欢计算机技术、读书等",
-          avatar: "/images/avatar.png",
+          avatar: "https://blog-1257292087.cos.ap-nanjing.myqcloud.com/avatar.png",
           socialLinks: [
             { name: "博客", url: "/posts" },
             { name: "Github", url: "https://github.com/wacome", isExternal: true },

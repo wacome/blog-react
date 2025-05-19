@@ -14,7 +14,7 @@ interface PostCardProps {
 
 export default function PostCard({ post }: PostCardProps) {
   // 获取封面图片 URL
-  const coverImage = post.cover || post.cover_image || post.coverImage || '/images/default-cover.jpg';
+  const coverImage = post.cover || post.cover_image || post.coverImage || 'https://blog-1257292087.cos.ap-nanjing.myqcloud.com/content-cover.jpg';
 
   return (
     <motion.article 

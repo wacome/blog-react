@@ -35,7 +35,7 @@
 }
 
 body {
-  background-image: url('/images/home-bg.png');
+  background-image: url('https://blog-1257292087.cos.ap-nanjing.myqcloud.com/home-bg.png');
   background-size: cover;
   background-attachment: fixed;
   background-position: center;
@@ -43,7 +43,7 @@ body {
 }
 
 .posts-bg {
-  background-image: url('/images/posts-bg.png');
+  background-image: url('https://blog-1257292087.cos.ap-nanjing.myqcloud.com/posts-bg.png');
   background-size: cover;
   background-attachment: fixed;
   background-position: center;

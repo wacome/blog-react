@@ -3,14 +3,19 @@ import React, { useState } from "react";
 import { getImageSrc } from '@/utils/getImageSrc';
 
 interface Props {
-  src: string;
+  src?: string;
   alt: string;
   className?: string;
-  fallback: string;
+  fallback?: string;
 }
 
-export default function AvatarWithFallback({ src, alt, className, fallback }: Props) {
-  const [imgSrc, setImgSrc] = useState(src);
+export default function AvatarWithFallback({ 
+  src, 
+  alt, 
+  className, 
+  fallback = 'https://blog-1257292087.cos.ap-nanjing.myqcloud.com/default-avatar.png' 
+}: Props) {
+  const [imgSrc, setImgSrc] = useState(src || fallback);
 
   return (
     <img

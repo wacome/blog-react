@@ -12,10 +12,10 @@ export default function AboutPage() {
         <div className="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8 w-full">
           <div className="relative w-32 h-32 md:w-48 md:h-48 rounded-full overflow-hidden border-4 border-white shadow-lg flex-shrink-0 mx-auto md:mx-0">
             <AvatarWithFallback
-              src="/images/avatar.png"
+              src="https://blog-1257292087.cos.ap-nanjing.myqcloud.com/avatar.png"
               alt="Toycon"
               className="object-cover w-full h-full"
-              fallback="/images/default-cover.jpg"
+              fallback="https://blog-1257292087.cos.ap-nanjing.myqcloud.com/default-avatar.png"
             />
           </div>
           
