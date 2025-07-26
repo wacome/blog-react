@@ -1,44 +1,44 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // 1. 严格模式 (React Strict Mode)
-  reactStrictMode: true,
-
-  // 2. 图片优化 (Image Optimization)
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'blog.toycon.cn',
-        port: '',
-        pathname: '/uploads/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'avatars.githubusercontent.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'cdn.jsdelivr.net', // 允许 jsDelivr CDN
-      },
-      {
-        protocol: 'https',
-        hostname: 'blog-1257292087.cos.ap-nanjing.myqcloud.com',
-      },
-    ],
+    domains: ['localhost', 'avatars.githubusercontent.com', 'api.toycon.cn', 'blog-1257292087.cos.ap-nanjing.myqcloud.com'],
   },
-
-  // 3. 环境变量 (Environment Variables)
-  env: {
-    API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+      {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com",
+              "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com",
+              "font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net https://fonts.googleapis.com",
+              "img-src 'self' data: blob: https://cdn.jsdelivr.net https://blog-1257292087.cos.ap-nanjing.myqcloud.com https://tse2-mm.cn.bing.net https://user-images.githubusercontent.com https://raw.githubusercontent.com",
+              "connect-src 'self' http://localhost:8080 https://fonts.googleapis.com https://fonts.gstatic.com https://api.toycon.cn",
+              "worker-src 'self' blob:",
+              "child-src 'self' blob:",
+              "frame-src 'self' chrome-extension://*"
+            ].join('; ')
+          }
+        ]
+      }
+    ];
+      },
+  async rewrites() {
+    const isDevelopment = process.env.NODE_ENV === 'development';
+    const apiBaseUrl = isDevelopment ? 'http://localhost:8080' : 'https://api.toycon.cn';
+    return [
+      {
+        source: '/api/:path*',
+        destination: `${apiBaseUrl}/api/:path*`,
+      },
+      {
+        source: '/uploads/:path*',
+        destination: `${apiBaseUrl}/uploads/:path*`,
+      },]
   },
-
-  // 4. 在生产环境中自动移除 console.log
-  compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
-  },
-
-  // 5. 启用 SWC 压缩
-  swcMinify: true,
 };
 
 module.exports = nextConfig;
