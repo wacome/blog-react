@@ -71,11 +71,9 @@ export default function CommentSection({ comments, postId }: CommentSectionProps
   // 效果1：GitHub 登录处理
   const handleGitHubLogin = () => {
     setIsGitHubLoading(true);
-    // 记录原始页面
-    localStorage.setItem('returnUrl', window.location.href);
     const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
     // 登录后返回当前页面，而不是固定的回调页
-    window.location.href = `${apiBaseUrl}/auth/github?returnUrl=${encodeURIComponent('https://blog.toycon.cn/auth/callback')}`;
+    window.location.href = `${apiBaseUrl}/auth/github?returnUrl=${encodeURIComponent(window.location.href)}`;
   };
   
   // 效果1：退出登录处理
