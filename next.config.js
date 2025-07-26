@@ -39,9 +39,6 @@ const nextConfig = {
 
   // 5. 启用 SWC 压缩
   swcMinify: true,
-
-  // 6. 独立的构建输出目录 (解决文件过大问题的关键！)
-  output: 'standalone',
 };
 
 module.exports = nextConfig;
