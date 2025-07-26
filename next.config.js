@@ -1,46 +1,55 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // 1. 严格模式 (React Strict Mode)
+  // 帮助识别潜在问题，建议在开发环境中开启。
+  reactStrictMode: true,
+
+  // 2. 图片优化 (Image Optimization)
+  // 配置允许加载图片的外部域名，增强安全性。
   images: {
-    domains: ['localhost', 'img.picui.cn', 'img1.doubanio.com', 'avatars.githubusercontent.com', 'api.toycon.cn', 'blog-1257292087.cos.ap-nanjing.myqcloud.com'],
-  },
-  async headers() {
-    return [
+    remotePatterns: [
       {
-        source: '/:path*',
-        headers: [
-          {
-            key: 'Content-Security-Policy',
-            value: [
-              "default-src 'self'",
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline' http://localhost:3000 http://localhost:8080 https://cdn.jsdelivr.net https://fonts.googleapis.com chrome-extension://*",
-              "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com",
-              "font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net https://fonts.googleapis.com",
-              "img-src 'self' data: blob: http://localhost:3000 http://localhost:8080 https://cdn.jsdelivr.net https://blog-1257292087.cos.ap-nanjing.myqcloud.com https://tse2-mm.cn.bing.net https://images.unsplash.com https://img1.doubanio.com https://img.picui.cn https://qlogo.cn https://p.qlogo.cn https://picx.zhimg.com https://pic1.zhimg.com https://pic2.zhimg.com https://pic3.zhimg.com https://pic4.zhimg.com https://pic5.zhimg.com https://pic6.zhimg.com https://pic7.zhimg.com https://pic8.zhimg.com https://pic9.zhimg.com https://i.loli.net https://s1.ax1x.com https://user-images.githubusercontent.com https://raw.githubusercontent.com https://avatars.githubusercontent.com https://files.catbox.moe https://pbs.twimg.com https://media.istockphoto.com https://images.pexels.com https://images.unsplash.com https://lh3.googleusercontent.com https://cdn.jsdelivr.net;",
-              "connect-src 'self' http://localhost:3000 http://localhost:8080 https://fonts.googleapis.com https://fonts.gstatic.com https://api.toycon.cn",
-              "worker-src 'self' blob:",
-              "child-src 'self' blob:",
-              "frame-src 'self' chrome-extension://*"
-            ].join('; ')
-          }
-        ]
-      }
-    ];
-  },
-  async rewrites() {
-    const isDevelopment = process.env.NODE_ENV === 'development';
-    const apiBaseUrl = isDevelopment ? 'http://localhost:8080' : 'https://api.toycon.cn';
-    
-    return [
-      {
-        source: '/api/:path*',
-        destination: `${apiBaseUrl}/api/:path*`,
+        protocol: 'https',
+        hostname: 'blog.toycon.cn', // 允许您自己博客的图片
+        port: '',
+        pathname: '/uploads/**', // 只允许 /uploads/ 路径下的图片
       },
       {
-        source: '/uploads/:path*',
-        destination: `${apiBaseUrl}/uploads/:path*`,
+        protocol: 'https',
+        hostname: 'avatars.githubusercontent.com', // 允许 GitHub 头像
       },
-    ];
+      {
+        protocol: 'https',
+        hostname: 'cdn.jsdelivr.net', // 允许 jsDelivr CDN
+      },
+      {
+        protocol: 'https',
+        hostname: 'blog-1257292087.cos.ap-nanjing.myqcloud.com', // 允许 GitHub 原始内容
+      },
+    ],
   },
+
+  // 3. 环境变量 (Environment Variables)
+  // 将后端的 API 地址配置为环境变量，方便不同环境切换。
+  // 在项目根目录的 .env.local 文件中添加 API_BASE_URL=http://localhost:8080
+  env: {
+    API_BASE_URL: process.env.API_BASE_URL,
+  },
+
+  // 4. 移除 console.log (Remove console.log in Production)
+  // 在生产环境中自动移除所有 console.log 语句，减小打包体积并提升安全性。
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+
+  // 5. SWC 编译器配置 (SWC Minification)
+  // Next.js 默认使用 SWC 进行编译和压缩，速度很快。通常无需额外配置。
+  swcMinify: true,
+
+  // 6. 独立的构建输出目录 (Standalone Output)
+  // 在构建时创建一个独立的 `standalone` 文件夹，包含所有必需的依赖，
+  // 非常适合 Docker 部署，可以极大减小 Docker 镜像的体积。
+  output: 'standalone',
 };
 
-module.exports = nextConfig; 
+module.exports = nextConfig;
