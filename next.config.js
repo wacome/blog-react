@@ -33,7 +33,7 @@ const nextConfig = {
   // 将后端的 API 地址配置为环境变量，方便不同环境切换。
   // 在项目根目录的 .env.local 文件中添加 API_BASE_URL=http://localhost:8080
   env: {
-    API_BASE_URL: process.env.API_BASE_URL,
+    API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
   },
 
   // 4. 移除 console.log (Remove console.log in Production)
