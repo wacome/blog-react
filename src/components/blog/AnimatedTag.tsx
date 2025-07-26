@@ -47,7 +47,7 @@ export default function AnimatedTag({ name, count, size = 'md', onClick }: Anima
     tap: { 
       scale: 0.95 
     }
-  };
+  } as const;
   
   const content = (
     <motion.span
