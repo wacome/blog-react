@@ -71,9 +71,13 @@ export default function CommentSection({ comments, postId }: CommentSectionProps
   // 效果1：GitHub 登录处理
   const handleGitHubLogin = () => {
     setIsGitHubLoading(true);
+    // 1. 将当前页面的 URL 存储到 localStorage，以便登录后可以返回
+    localStorage.setItem('loginReturnUrl', window.location.href);
+
     const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
-    // 登录后返回当前页面，而不是固定的回调页
-    window.location.href = `${apiBaseUrl}/auth/github?returnUrl=${encodeURIComponent(window.location.href)}`;
+    
+    // 2. 指向后端的 GitHub 登录接口
+    window.location.href = `${apiBaseUrl}/auth/github`;
   };
   
   // 效果1：退出登录处理
