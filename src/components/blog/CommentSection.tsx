@@ -60,7 +60,7 @@ export default function CommentSection({ comments, postId }: CommentSectionProps
   const [honeypot, setHoneypot] = useState('');
   const formRenderTime = useRef(Date.now());
 
-  // 当用户信息变化时，自动填充表单
+  // 效果1：当用户信息变化时，自动填充表单
   useEffect(() => {
     if (user) {
       setName(user.nickname || user.username || '');
@@ -68,21 +68,21 @@ export default function CommentSection({ comments, postId }: CommentSectionProps
     }
   }, [user]);
   
-  // GitHub 登录处理
+  // 效果1：GitHub 登录处理
   const handleGitHubLogin = () => {
     setIsGitHubLoading(true);
-    localStorage.setItem('loginReturnUrl', window.location.href);
     const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
-    window.location.href = `${apiBaseUrl}/auth/github`;
+    // 登录后返回当前页面，而不是固定的回调页
+    window.location.href = `${apiBaseUrl}/auth/github?returnUrl=${encodeURIComponent(window.location.href)}`;
   };
   
-  // 退出登录处理
+  // 效果1：退出登录处理
   const handleLogout = async () => {
     try {
       await apiClient.post('/auth/logout');
       setUser(null);
       localStorage.removeItem('user');
-      window.location.reload();
+      window.location.reload(); // 刷新以确保状态完全重置
     } catch (e) {
       setError('退出登录失败，请重试');
     }
@@ -93,8 +93,13 @@ export default function CommentSection({ comments, postId }: CommentSectionProps
     setError(null);
     setSuccess(null);
   
-    if (honeypot) return;
-    if (Date.now() - formRenderTime.current < 3000) {
+    // 安全性检查 1: 检查蜜罐字段
+    if (honeypot) {
+      console.warn("Bot detected!");
+      return;
+    }
+    // 安全性检查 2: 检查提交速度
+    if (Date.now() - formRenderTime.current < 3000) { // 小于3秒的提交很可能是机器人
       setError('您的操作太快了，请稍后再试');
       return;
     }
@@ -113,8 +118,18 @@ export default function CommentSection({ comments, postId }: CommentSectionProps
     isReply ? setReplyLoading(true) : setLoading(true);
   
     try {
-      const newCommentData: CommentInput = { author: name, content, email, website, avatar: user?.avatar, parent_id: parentId };
+      const newCommentData: CommentInput = {
+        author: name,
+        content,
+        email,
+        website,
+        avatar: user?.avatar,
+        parent_id: parentId,
+      };
+  
       const newCommentFromApi = await commentApi.createComment(postId, newCommentData);
+  
+      // **修复类型错误的关键**：这一步完全按照您原来的方式来构造新评论对象
       const newCommentForState: Comment = {
         ...newCommentFromApi,
         post_id: postId,
@@ -123,6 +138,7 @@ export default function CommentSection({ comments, postId }: CommentSectionProps
         status: (newCommentFromApi as any).status || 'approved',
         children: [],
       };
+  
       setLocalComments(prev => [newCommentForState, ...prev]);
   
       if (isReply) {
@@ -133,10 +149,12 @@ export default function CommentSection({ comments, postId }: CommentSectionProps
       }
       
       if (!user) {
-        setWebsite('');
+        setWebsite(''); // 只清空可选的网址
       }
+
       setSuccess('评论已提交，正在等待审核。');
-      formRenderTime.current = Date.now();
+      formRenderTime.current = Date.now(); // 成功后重置计时器
+
     } catch (e: any) {
       setError(e.message || '评论提交失败');
     } finally {
@@ -144,6 +162,7 @@ export default function CommentSection({ comments, postId }: CommentSectionProps
     }
   };
   
+  // 兼容旧的 `created_at` 字段并构建评论树
   const commentTree = buildCommentTree(
     localComments.map(c => ({ ...c, createdAt: c.createdAt || c.created_at }))
   );
@@ -165,24 +184,23 @@ export default function CommentSection({ comments, postId }: CommentSectionProps
               </div>
               <div className="ml-3 md:hidden">
                 <h3 className="font-medium text-gray-800">{comment.author}</h3>
-                <span className="text-xs text-gray-500">{comment.createdAt ? new Date(comment.createdAt).toLocaleDateString('zh-CN') : ''}</span>
+              <span className="text-xs text-gray-500">{comment.createdAt ? new Date(comment.createdAt).toLocaleDateString('zh-CN') : ''}</span>
               </div>
             </div>
             <div className="flex-grow">
               <div className="hidden md:flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2">
                 <h3 className="font-medium text-gray-800">{comment.author}</h3>
-                <span className="text-xs text-gray-500">{comment.createdAt ? new Date(comment.createdAt).toLocaleDateString('zh-CN') : ''}</span>
-              </div>
-              <p className="text-gray-700 text-sm md:text-base whitespace-pre-line">{comment.content}</p>
-              <div className="mt-2 flex gap-3">
-                <button className="text-xs text-primary hover:underline" onClick={() => setReplyTo(isReplying ? null : comment.id)}>
-                  {isReplying ? '取消回复' : '回复'}
-                </button>
-              </div>
+              <span className="text-xs text-gray-500">{comment.createdAt ? new Date(comment.createdAt).toLocaleDateString('zh-CN') : ''}</span>
+            </div>
+            <p className="text-gray-700 text-sm md:text-base whitespace-pre-line">{comment.content}</p>
+            <div className="mt-2 flex gap-3">
+              <button className="text-xs text-primary hover:underline" onClick={() => setReplyTo(isReplying ? null : comment.id)}>
+                {isReplying ? '' : '回复'}
+              </button>
+            </div>
 
-              {isReplying && (
-                <form className="mt-3" onSubmit={(e) => { e.preventDefault(); submitComment(replyText, true, comment.id); }}>
-                  {/* --- 新增的匿名用户信息输入框 --- */}
+            {isReplying && (
+              <form className="mt-3" onSubmit={(e) => { e.preventDefault(); submitComment(replyText, true, comment.id); }}>
                   {!user && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
                       <input 
@@ -203,30 +221,29 @@ export default function CommentSection({ comments, postId }: CommentSectionProps
                       />
                     </div>
                   )}
-                  {/* --- 新增结束 --- */}
-                  <textarea
-                    className="textarea min-h-[60px] text-sm w-full"
-                    placeholder={`回复 @${comment.author}`}
-                    value={replyText}
-                    onChange={e => setReplyText(e.target.value)}
-                    required
-                    autoFocus
-                  />
-                  <div className="flex justify-end mt-2 gap-2">
-                    <button className="btn btn-secondary btn-sm" onClick={() => setReplyTo(null)} type="button">取消</button>
-                    <button className="btn btn-primary btn-sm" type="submit" disabled={replyLoading}>
-                      {replyLoading ? '提交中...' : '回复'}
-                    </button>
-                  </div>
-                </form>
-              )}
-
-              {comment.children && comment.children.length > 0 && (
-                <div className="mt-2 border-l-2 border-gray-100 pl-4">
-                  {comment.children.map(child => renderCommentItem(child, depth + 1))}
+                <textarea
+                  className="textarea min-h-[60px] text-sm w-full"
+                  placeholder={`回复 @${comment.author}`}
+                  value={replyText}
+                  onChange={e => setReplyText(e.target.value)}
+                  required
+                  autoFocus
+                />
+                <div className="flex justify-end mt-2 gap-2">
+                  <button className="btn btn-secondary btn-sm" onClick={() => setReplyTo(null)} type="button">取消</button>
+                  <button className="btn btn-primary btn-sm" type="submit" disabled={replyLoading}>
+                    {replyLoading ? '提交中...' : '回复'}
+                  </button>
                 </div>
-              )}
-            </div>
+              </form>
+            )}
+
+            {comment.children && comment.children.length > 0 && (
+              <div className="mt-2 border-l-2 border-gray-100 pl-4">
+                {comment.children.map(child => renderCommentItem(child, depth + 1))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     );
@@ -240,6 +257,7 @@ export default function CommentSection({ comments, postId }: CommentSectionProps
         {commentTree.map(comment => renderCommentItem(comment))}
       </div>
       
+      {/* 效果2：只有在不回复任何楼中楼时，才显示主评论框 */}
       {replyTo === null && (
         <div className="card p-4 md:p-6">
           <h3 className="text-lg md:text-xl font-semibold text-gray-800 mb-4">发表评论</h3>
@@ -279,6 +297,7 @@ export default function CommentSection({ comments, postId }: CommentSectionProps
             {error && <div className="text-red-500 mb-2 text-sm">{error}</div>}
             {success && <div className="text-green-600 mb-2 text-sm">{success}</div>}
             
+            {/* 安全性：蜜罐字段 */}
             <input type="text" value={honeypot} onChange={e => setHoneypot(e.target.value)} style={{ display: 'none' }} />
 
             {!user && (
