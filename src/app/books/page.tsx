@@ -28,7 +28,8 @@ const BooksPage: React.FC = () => {
     fetchBooks();
   }, []);
 
-  const getStatusText = (status: string) => {
+  const getStatusText = (status?: string) => {
+    if (!status) return '-';
     switch (status) {
       case 'want':
         return '想读';
@@ -91,7 +92,7 @@ const BooksPage: React.FC = () => {
             </button>
             <div className="flex flex-col md:flex-row gap-6 items-center">
               <img
-                src={getImageSrc(selectedBook.cover)}
+                src={getImageSrc(selectedBook.cover || '')}
                 alt={selectedBook.title}
                 className="w-40 h-56 object-cover rounded-xl shadow-md border border-gray-200 mb-4 md:mb-0"
               />
@@ -99,11 +100,11 @@ const BooksPage: React.FC = () => {
                 <h2 className="text-2xl font-bold mb-2 text-gray-900">{selectedBook.title}</h2>
                 <ul className="text-gray-700 space-y-1 text-base">
                   <li><span className="font-semibold">作者：</span>{selectedBook.author}</li>
-                  <li><span className="font-semibold">出版社：</span>{selectedBook.publisher}</li>
-                  <li><span className="font-semibold">出版日期：</span>{selectedBook.publish_date}</li>
-                  <li><span className="font-semibold">ISBN：</span>{selectedBook.isbn}</li>
-                  <li><span className="font-semibold">页数：</span>{selectedBook.pages}</li>
-                  <li><span className="font-semibold">我的评分：</span>{selectedBook.rating}</li>
+                  <li><span className="font-semibold">出版社：</span>{selectedBook.publisher || '-'}</li>
+                  <li><span className="font-semibold">出版日期：</span>{selectedBook.publish_date || '-'}</li>
+                  <li><span className="font-semibold">ISBN：</span>{selectedBook.isbn || '-'}</li>
+                  <li><span className="font-semibold">页数：</span>{selectedBook.pages || '-'}</li>
+                  <li><span className="font-semibold">我的评分：</span>{selectedBook.rating || '-'}</li>
                   <li><span className="font-semibold">状态：</span>{getStatusText(selectedBook.status)}</li>
                 </ul>
               </div>
