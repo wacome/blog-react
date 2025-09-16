@@ -41,7 +41,11 @@ const BooksPage: React.FC = () => {
     const fetchBooks = async () => {
       try {
         const response = await bookApi.getBooks();
-        setBooks(response.data.books);
+        if (response.data && response.data.books) {
+          setBooks(response.data.books);
+        } else {
+          setBooks([]);
+        }
         setLoading(false);
       } catch (err) {
         setError('获取书籍列表失败');
