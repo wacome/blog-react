@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { getImageSrc } from '@/utils/getImageSrc';
-import { getBooks } from '@/api/bookApi';
+import { bookApi } from '@/api/book';
 
 interface Book {
   id: number;
@@ -40,7 +40,7 @@ const BooksPage: React.FC = () => {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const response = await getBooks();
+        const response = await bookApi.getBooks();
         setBooks(response.data.books);
         setLoading(false);
       } catch (err) {
