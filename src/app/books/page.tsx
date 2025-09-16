@@ -2,34 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { getImageSrc } from '@/utils/getImageSrc';
-import { bookApi } from '@/api/book';
-
-interface Book {
-  id: number;
-  title: string;
-  author: string;
-  desc: string;
-  cover: string;
-  publisher: string;
-  publish_date: string;
-  isbn: string;
-  pages: number;
-  rating: number;
-  status: string;
-  created_at: string;
-  updated_at: string;
-  edges: {
-    owner: {
-      id: number;
-      username: string;
-      email: string;
-      role: string;
-      avatar: string;
-      created_at: string;
-      updated_at: string;
-    };
-  };
-}
+import { bookApi, Book } from '@/api/book';
 
 const BooksPage: React.FC = () => {
   const [books, setBooks] = useState<Book[]>([]);
@@ -85,15 +58,15 @@ const BooksPage: React.FC = () => {
             onClick={() => setSelectedBook(book)}
           >
             <img
-              src={getImageSrc(book.cover)}
+              src={getImageSrc(book.cover || '')}
               alt={book.title}
               className="w-full h-64 object-cover"
             />
             <div className="p-4">
               <h2 className="text-xl font-semibold">{book.title}</h2>
               <p className="text-gray-600">作者: {book.author}</p>
-              <p className="text-gray-600">状态: {getStatusText(book.status)}</p>
-              <p className="text-gray-600">评分: {book.rating}</p>
+              <p className="text-gray-600">状态: {getStatusText(book.status || '')}</p>
+              <p className="text-gray-600">评分: {book.rating || '-'}</p>
             </div>
           </div>
         ))}
